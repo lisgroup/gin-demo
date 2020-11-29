@@ -70,6 +70,23 @@ func main() {
 		r.HandleContext(c)
 	})
 
+	// ### 4.接收JSON参数
+	// 定义接收 User 的结构体
+	type User struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	r.POST("/json", func(c *gin.Context) {
+		var user User
+		err := c.BindJSON(&user)
+		if err != nil {
+			c.JSON(200, gin.H{"code": 400, "msg": "error", "data": nil})
+			return
+		} else {
+			c.JSON(200, gin.H{"code": 0, "msg": "success", "data": user})
+		}
+	})
+
 	r.Run() // 监听并在 0.0.0.0:8080 上启动服务
 }
 
